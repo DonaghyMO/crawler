@@ -11,7 +11,7 @@ class WechatChannel():
         if method is None:
             itchat.auto_login(enableCmdQR=2)
         else:
-            itchat.auto_login(enableCmdQR=2, loginCallback=method)
+            itchat.auto_login(enableCmdQR=2,loginCallback=method)
 
         # start message listener
         itchat.run()

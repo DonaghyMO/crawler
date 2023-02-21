@@ -18,9 +18,9 @@ useless_key_words = ["无查询结果"]
 engineering = ["工学"]
 expertises = ["网络空间安全","计算机","电子信息"]
 # 爬虫开始的日期
-begin_date = datetime.date.today()
-# begin_date = datetime.date(2022,2,15)
-file_name = "E:\\msg\\{}.txt".format(begin_date)
+#begin_date = datetime.date.today()
+begin_date = datetime.date(2022,2,15)
+file_name = "/root/msg/{}.txt".format(begin_date)
 
 
 def parse_time(time_str):
@@ -136,7 +136,7 @@ def five_m_send():
 
 
 def after_login():
-    sched.add_job(five_m_send, "interval", minutes=5)
+    sched.add_job(five_m_send, "interval", seconds=40)
     sched.start()
     logger.info("发送消息")
 
