@@ -20,8 +20,8 @@ expertises = ["网络空间安全","计算机","电子信息"]
 # 爬虫开始的日期
 begin_date = datetime.date.today()
 # begin_date = datetime.date(2022,2,15)
-file_name = "E:\\msg\\{}.txt".format(begin_date)
-# file_name = "/root/msg/{}.txt".format(begin_date)
+# file_name = "E:\\msg\\{}.txt".format(begin_date)
+file_name = "/root/msg/{}.txt".format(begin_date)
 
 
 def parse_time(time_str):
