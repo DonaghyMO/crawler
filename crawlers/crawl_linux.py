@@ -55,7 +55,8 @@ def crawl_msg():
         "xiaomuchong": ["http://muchong.com/bbs/kaoyan.php?action=adjust&type=1",
                         "http://muchong.com/bbs/kaoyan.php?action=adjust&type=1&page=1&page=2",
                         "http://muchong.com/bbs/kaoyan.php?action=adjust&type=1&page=1&page=3",
-                        "http://muchong.com/bbs/kaoyan.php?action=adjust&type=1&page=3&page=4"]
+                        "http://muchong.com/bbs/kaoyan.php?action=adjust&type=1&page=3&page=4"],
+        "hangzhoushifan":"https://yjs.hznu.edu.cn/yjszs/sszs/"
     }
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",
@@ -118,6 +119,19 @@ def crawl_msg():
             if not is_msg_exist(mesg):
                 flag = False
                 msg_to_write = msg_to_write + mesg
+
+    # 杭州师范大学
+    req = requests.get(url_dic["hangzhoushifan"], headers=headers)
+    req.encoding = "utf-8"
+    hangshifan = bs4.BeautifulSoup(req.text, "html.parser")
+    for i in hangshifan.find_all("a", attrs={"title": re.compile("^$")}):
+        mesg_time = re.findall(time_match, str(i))[0]
+
+        mesg = "【杭州师范大学{}】有新消息：{}\n".format(parse_time(mesg_time),
+                                                    re.sub(r"<.*?>|&nbsp;|\n", "", str(i)))
+        if not is_msg_exist(mesg):
+            flag = False
+            msg_to_write = msg_to_write + mesg
 
     # 小木虫
     for url in url_dic["xiaomuchong"]:
