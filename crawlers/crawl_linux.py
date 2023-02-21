@@ -148,7 +148,7 @@ def five_m_send():
 
 
 def after_login():
-    sched.add_job(five_m_send, "interval", minutes=5)
+    sched.add_job(five_m_send, "interval", minutes=3)
     sched.start()
     logger.info("发送消息")
 
