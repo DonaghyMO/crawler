@@ -144,16 +144,16 @@ def crawl_msg():
                 msg_to_write = msg_to_write + mesg
 
     # 杭州师范大学
-    req = requests.get(url_dic["hangzhoushifan"], headers=headers)
-    req.encoding = "utf-8"
-    hangshifan = bs4.BeautifulSoup(req.text, "html.parser")
-    for i in hangshifan.find_all("a", attrs={"title": re.compile("^$")}):
-        mesg_time = re.findall(time_match, str(i))[0]
-        mesg = "【杭州师范大学{}】有新消息：{}\n".format(parse_time(mesg_time),
-                                                      re.sub(r"<.*?>|&nbsp;|\n", "", str(i)))
-        if not is_msg_exist(mesg,today_contain) and parse_time(mesg_time) >= begin_date:
-            flag = False
-            msg_to_write = msg_to_write + mesg
+    # req = requests.get(url_dic["hangzhoushifan"], headers=headers)
+    # req.encoding = "utf-8"
+    # hangshifan = bs4.BeautifulSoup(req.text, "html.parser")
+    # for i in hangshifan.find_all("a", attrs={"title": re.compile("^$")}):
+    #     mesg_time = re.findall(time_match, str(i))[0]
+    #     mesg = "【杭州师范大学{}】有新消息：{}\n".format(parse_time(mesg_time),
+    #                                                   re.sub(r"<.*?>|&nbsp;|\n", "", str(i)))
+    #     if not is_msg_exist(mesg,today_contain) and parse_time(mesg_time) >= begin_date:
+    #         flag = False
+    #         msg_to_write = msg_to_write + mesg
 
     # 湘潭大学
     req = requests.get(url_dic["xiangtandaxue"], headers=headers, verify=False)
