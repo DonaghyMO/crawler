@@ -53,12 +53,12 @@ def crawl_msg():
     fp = open(file_name, "a")
     msg_to_write = ""
     # # 研招网查成绩
-    params = {"xm": "莫登意", "zjhm": "430105199806035615", "ksbh": "100133412881861", "bkdwdm": "10013"}
-    req = requests.post(url_dic["yanzhao"], params, headers=headers)
-    if "无查询结果" in req.text:
-        wchannel.send("【研招网】成绩还查不到\n",get_mo_id())
-    else:
-        wchannel.send("【研招网】成绩查到了！！\n",get_mo_id())
+    # params = {"xm": "莫登意", "zjhm": "430105199806035615", "ksbh": "100133412881861", "bkdwdm": "10013"}
+    # req = requests.post(url_dic["yanzhao"], params, headers=headers)
+    # if "无查询结果" in req.text:
+    #     wchannel.send("【研招网】成绩还查不到\n",get_mo_id())
+    # else:
+    #     wchannel.send("【研招网】成绩查到了！！\n",get_mo_id())
 
 
     # 广州大学方班最新消息
@@ -92,6 +92,19 @@ def crawl_msg():
                     flag = False
                     msg_to_write = msg_to_write+mesg
 
+    # 杭州师范大学
+    # req = requests.get(url_dic["hangzhoushifan"], headers=headers)
+    # req.encoding = "utf-8"
+    # hangshifan = bs4.BeautifulSoup(req.text, "html.parser")
+    # for i in hangshifan.find_all("a", attrs={"title": re.compile("^$")}):
+    #     mesg_time = re.findall(time_match, str(i))[0]
+    #     mesg = "【杭州师范大学{}】有新消息：{}\n".format(parse_time(mesg_time),
+    #                                                   re.sub(r"<.*?>|&nbsp;|\n", "", str(i)))
+    #     if not is_msg_exist(mesg) and parse_time(mesg_time) >= begin_date:
+    #         flag = False
+    #         msg_to_write = msg_to_write + mesg
+
+
     # 福建师范大学研究生院
     req = requests.get(url_dic["fujianshifan"], headers=headers)
     req.encoding = "utf-8"
@@ -105,6 +118,8 @@ def crawl_msg():
             if not is_msg_exist(mesg):
                 flag = False
                 msg_to_write = msg_to_write+mesg
+
+    # 湖北大学
 
     # 小木虫
     for url in url_dic["xiaomuchong"]:
