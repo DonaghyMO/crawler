@@ -1,16 +1,15 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+import os
+import sys
+sys.path.append(os.path.abspath(__file__).split("crawlers")[0])
 import itchat
 import requests
 import re
 import bs4
 import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
-
-import os
-import sys
-
-sys.path.append(os.path.abspath(__file__).split("crawlers")[0])
+import platform
 from channel import wechat
 from common.log import logger
 
@@ -21,8 +20,11 @@ expertises = ["网络空间安全", "计算机", "电子", "网络", "计算机�
 # 爬虫开始的日期
 begin_date = datetime.date.today()
 # begin_date = datetime.date(2022,2,15)
-# file_name = "E:\\msg\\{}.txt".format(begin_date)
-file_name = "/root/msg/{}.txt".format(begin_date)
+
+if platform.system().lower()=="linux":
+    file_name = "/root/msg/{}.txt".format(begin_date)
+else:
+    file_name = "D:\\msg\\{}.txt".format(begin_date)
 
 
 def parse_time(time_str):
@@ -66,12 +68,12 @@ def crawl_msg():
     fp = open(file_name, "a")
     msg_to_write = ""
     # # 研招网查成绩
-    params = {"xm": "莫登意", "zjhm": "430105199806035615", "ksbh": "100133412881861", "bkdwdm": "10013"}
-    req = requests.post(url_dic["yanzhao"], params, headers=headers)
-    if "无查询结果" in req.text:
-        wchannel.send("【研招网】成绩还查不到\n", get_mo_id())
-    else:
-        wchannel.send("【研招网】成绩查到了！！\n", get_mo_id())
+    # params = {"xm": "莫登意", "zjhm": "430105199806035615", "ksbh": "100133412881861", "bkdwdm": "10013"}
+    # req = requests.post(url_dic["yanzhao"], params, headers=headers)
+    # if "无查询结果" in req.text:
+    #     wchannel.send("【研招网】成绩还查不到\n", get_mo_id())
+    # else:
+    #     wchannel.send("【研招网】成绩查到了！！\n", get_mo_id())
 
     # 广州大学方班最新消息
     req = requests.get(url_dic["fangban"], headers=headers)
@@ -80,9 +82,7 @@ def crawl_msg():
     for i in fangban_b.select("a > span"):
         mesg_date_str = re.findall(time_match, str(i.find_parent()))
         if mesg_date_str:
-            year, month, day = mesg_date_str[0].split('-')
-            year, month, day = int(year), int(month), int(day)
-            mesg_date = datetime.date(year, month, day)
+            mesg_date = parse_time(mesg_date_str[0])
             if mesg_date > begin_date:
                 mesg = "【广州大学方班{}】有新消息{}\n".format(mesg_date,
                                                              re.sub(r"<.*?>|&nbsp;|\n", "", str(i.find_parent())))
@@ -121,16 +121,16 @@ def crawl_msg():
                 msg_to_write = msg_to_write + mesg
 
     # 杭州师范大学
-    req = requests.get(url_dic["hangzhoushifan"], headers=headers)
-    req.encoding = "utf-8"
-    hangshifan = bs4.BeautifulSoup(req.text, "html.parser")
-    for i in hangshifan.find_all("a", attrs={"title": re.compile("^$")}):
-        mesg_time = re.findall(time_match, str(i))[0]
-        if not is_msg_exist(mesg) and parse_time(mesg_time) >= begin_date:
-            flag = False
-            mesg = "【杭州师范大学{}】有新消息：{}\n".format(parse_time(mesg_time),
-                                                          re.sub(r"<.*?>|&nbsp;|\n", "", str(i)))
-            msg_to_write = msg_to_write + mesg
+    # req = requests.get(url_dic["hangzhoushifan"], headers=headers)
+    # req.encoding = "utf-8"
+    # hangshifan = bs4.BeautifulSoup(req.text, "html.parser")
+    # for i in hangshifan.find_all("a", attrs={"title": re.compile("^$")}):
+    #     mesg_time = re.findall(time_match, str(i))[0]
+    #     mesg = "【杭州师范大学{}】有新消息：{}\n".format(parse_time(mesg_time),
+    #                                                   re.sub(r"<.*?>|&nbsp;|\n", "", str(i)))
+    #     if not is_msg_exist(mesg) and parse_time(mesg_time) >= begin_date:
+    #         flag = False
+    #         msg_to_write = msg_to_write + mesg
 
     # 小木虫
     for url in url_dic["xiaomuchong"]:
@@ -147,6 +147,8 @@ def crawl_msg():
                     msg_to_write = msg_to_write + mesg
     if not flag:
         fp.write(msg_to_write)
+    else:
+        logger.info("正在爬取")
 
     # TODO:研招网
 
