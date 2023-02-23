@@ -26,6 +26,7 @@ def parse_xiangtan_time(time_msg):
     return None
 
 
+
 if __name__ == '__main__':
     # 研招网
     # url = "https://yz.chsi.com.cn/apply/cjcx/cjcx.do"
@@ -107,14 +108,20 @@ if __name__ == '__main__':
 
     # 测试湖北大学
     # 湖北大学
-    url = "http://yz.hubu.edu.cn/zsxy/sszs.htm"
-    req = requests.get(url, headers=headers)
-    req.encoding = "utf-8"
-    hubeidaxue_b = bs4.BeautifulSoup(req.text, "html.parser")
-    for i in hubeidaxue_b.find_all("a",attrs={'target':"_blank"}):
-        if 'title' in i.attrs.keys():
+    # url = "http://yz.hubu.edu.cn/zsxy/sszs.htm"
+    # req = requests.get(url, headers=headers)
+    # req.encoding = "utf-8"
+    # hubeidaxue_b = bs4.BeautifulSoup(req.text, "html.parser")
+    # for i in hubeidaxue_b.find_all("a",attrs={'target':"_blank"}):
+    #     if 'title' in i.attrs.keys():
+    #
+    #         date = parse_time(re.findall(r'\d+-\d+-\d+', str(i.parent))[0])
+    #         msg = "【湖北大学{}】{}".format(str(date), delete_html(str(i)))
+    #         msg_to_write = msg_to_write + str(msg)
+    #         print(msg_to_write)
+    #
 
-            date = parse_time(re.findall(r'\d+-\d+-\d+', str(i.parent))[0])
-            msg = "【湖北大学{}】{}".format(str(date), delete_html(str(i)))
-            msg_to_write = msg_to_write + str(msg)
-            print(msg_to_write)
+    # 测试linux发微信
+    c = wechat.WechatChannel()
+    c.startup(test_send)
+

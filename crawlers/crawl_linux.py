@@ -207,7 +207,7 @@ def crawl_msg():
 
     if not flag:
         fp.write(msg_to_write)
-        msg_to_write = msg_to_write+"正在爬取"
+        # msg_to_write = msg_to_write+"正在爬取"
     else:
         logger.info("正在爬取")
 
