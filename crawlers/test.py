@@ -25,6 +25,11 @@ def parse_xiangtan_time(time_msg):
         return str(datetime.date(year=year, month=month, day=day))
     return None
 
+def test_send():
+    msg = "test"
+    receiver = get_mo_id()
+    itchat.send(msg, toUserName=receiver)
+
 
 
 if __name__ == '__main__':
@@ -124,4 +129,6 @@ if __name__ == '__main__':
     # 测试linux发微信
     c = wechat.WechatChannel()
     c.startup(test_send)
+
+
 
