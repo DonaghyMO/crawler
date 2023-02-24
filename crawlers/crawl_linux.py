@@ -156,6 +156,7 @@ def crawl_msg():
     #         msg_to_write = msg_to_write + mesg
 
     # 湘潭大学
+    requests.packages.urllib3.disable_warnings()
     req = requests.get(url_dic["xiangtandaxue"], headers=headers, verify=False)
     req.encoding = "utf-8"
     xiangtan_b = bs4.BeautifulSoup(req.text, "html.parser")
