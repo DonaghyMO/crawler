@@ -23,13 +23,21 @@ strong_notify_schools = ["燕山大学", "广州大学", "福建师范大学", "
 begin_date = datetime.date.today()
 # begin_date = datetime.date(2022,2,15)
 
+work_directory_linux = "/root/msg/"
+work_directory_win = "D:\\msg\\"
+
 if platform.system().lower() == "linux":
-    file_name = "/root/msg/{}.txt".format(begin_date)
+    file_name = "{}{}.txt".format(work_directory_linux,begin_date)
 else:
-    file_name = "D:\\msg\\{}.txt".format(begin_date)
+    file_name = "{}{}.txt".format(work_directory_win,begin_date)
 if not os.path.exists(file_name):
     fp = open(file_name, "w")
     fp.close()
+
+def get_work_directory():
+    if platform.system().lower() == "linux":
+        return work_directory_linux
+    return work_directory_win
 
 def parse_xiangtan_time(time_msg):
     months = {"一月": 1, "二月": 2, "三月": 3, "四月": 4, "五月": 5, "六月": 6, "七月": 7, "八月": 8, "九月": 9,
@@ -208,7 +216,8 @@ def crawl_msg():
 
     if not flag:
         fp.write(msg_to_write)
-        # msg_to_write = msg_to_write+"正在爬取"
+        msg_fp = open(get_work_directory()+"newmsg",'a')
+        msg_fp.write(msg_to_write)
     else:
         logger.info("正在爬取")
 
