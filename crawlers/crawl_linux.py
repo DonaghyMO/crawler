@@ -187,7 +187,7 @@ def crawl_msg():
         crawl_day = datetime.date(year, month, day)
         if crawl_day >= begin_date:
             msg = "【燕山大学{}】{}\n".format(begin_date, delete_html(str(i)).strip())
-            if not is_msg_exist(msg,today_contain):
+            if not is_msg_exist(msg, today_contain):
                 msg_to_write = msg_to_write+msg
 
     # 湖北大学
@@ -201,7 +201,6 @@ def crawl_msg():
                 msg = "【湖北大学{}】{}\n".format(str(date),delete_html(str(i)))
                 if not is_msg_exist(msg, today_contain):
                     msg_to_write = msg_to_write + msg
-                msg_to_write = msg_to_write+str(msg)
 
 
     # 小木虫
