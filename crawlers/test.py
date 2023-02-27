@@ -54,7 +54,7 @@ if __name__ == '__main__':
     # for i in hangshifan.find_all("a",attrs={"title":re.compile("^$")}):
     #     mesg_time = re.findall(time_match, str(i))[0]
     #
-    #     mesg = "【杭州师范大学{}】有新消息：{}".format(parse_time(mesg_time),
+    #     mesg = "【杭州师范大学{}】有on 新消息：{}".format(parse_time(mesg_time),
     #                                                  re.sub(r"<.*?>|&nbsp;|\n", "", str(i)))
     #     if not is_msg_exist(mesg):
     #         flag = False

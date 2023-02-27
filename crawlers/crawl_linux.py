@@ -20,8 +20,8 @@ engineering = ["工学"]
 expertises = ["网络空间安全", "计算机", "电子", "网络", "计算机科学与技术", "电子信息"]
 strong_notify_schools = ["燕山大学", "广州大学", "福建师范大学", "湖北大学", "石河子大学", "杭州师范大学", "湘潭大学"]
 # 爬虫开始的日期
-begin_date = datetime.date.today()
-# begin_date = datetime.date(2022,2,15)
+# begin_date = datetime.date.today()
+begin_date = datetime.date(2022,2,15)
 
 work_directory_linux = "/root/msg/"
 work_directory_win = "D:\\msg\\"
@@ -171,10 +171,11 @@ def crawl_msg():
     for i in xiangtan_b.find_all("article", attrs={
         "class": "elementor-post elementor-grid-item post-2106 post type-post status-publish format-standard hentry category-36"}):
         msg_day = parse_xiangtan_time(delete_html(str(i.div.div)))
-        if msg_day >= begin_date and not is_msg_exist(msg,today_contain):
+        if msg_day >= begin_date:
             msg = "【湘潭大学{}】{}\n".format(str(begin_date), delete_html(str(i)))
-            flag = False
-            msg_to_write = msg_to_write + msg
+            if not is_msg_exist(msg,today_contain):
+                flag = False
+                msg_to_write = msg_to_write + msg
 
     # 燕山大学
     req = requests.get(url_dic["yanshandaxue"], headers=headers, verify=False)
