@@ -20,8 +20,8 @@ engineering = ["工学"]
 expertises = ["网络空间安全", "计算机", "电子", "网络", "计算机科学与技术", "电子信息"]
 strong_notify_schools = ["燕山大学", "广州大学", "福建师范大学", "湖北大学", "石河子大学", "杭州师范大学", "湘潭大学"]
 # 爬虫开始的日期
-# begin_date = datetime.date.today()
-begin_date = datetime.date(2022,2,15)
+begin_date = datetime.date.today()
+# begin_date = datetime.date(2022,2,15)
 
 work_directory_linux = "/root/msg/"
 work_directory_win = "D:\\msg\\"
