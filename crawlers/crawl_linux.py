@@ -187,7 +187,8 @@ def crawl_msg():
         crawl_day = datetime.date(year, month, day)
         if crawl_day >= begin_date:
             msg = "【燕山大学{}】{}\n".format(begin_date, delete_html(str(i)).strip())
-            msg_to_write = msg_to_write+msg
+            if not is_msg_exist(msg,today_contain):
+                msg_to_write = msg_to_write+msg
 
     # 湖北大学
     req = requests.get(url_dic['hubeidaxue'], headers=headers)
@@ -198,6 +199,8 @@ def crawl_msg():
             date = parse_time(re.findall(r'\d+-\d+-\d+',str(i.parent))[0])
             if date >= begin_date:
                 msg = "【湖北大学{}】{}\n".format(str(date),delete_html(str(i)))
+                if not is_msg_exist(msg, today_contain):
+                    msg_to_write = msg_to_write + msg
                 msg_to_write = msg_to_write+str(msg)
 
 
