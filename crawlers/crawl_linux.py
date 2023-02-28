@@ -228,7 +228,7 @@ def crawl_msg():
         msg_fp.write(msg_to_write)
     else:
         logger.info("正在爬取")
-        wchannel.send("持续时间：{}分钟".format((time.time()-start_time)/60))
+        wchannel.send("持续时间：{}分钟".format((time.time()-start_time)/60),get_mo_id())
 
     # TODO:研招网
 
