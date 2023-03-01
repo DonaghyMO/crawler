@@ -230,11 +230,15 @@ def crawl_msg():
     else:
         logger.info("正在爬取")
         wchannel.send("持续时间：{}分钟".format((time.time()-start_time)/60),get_mo_id())
-
+    keep_alive()
     # TODO:研招网
 
     # TODO:中国教育在线
     return msg_to_write
+
+def keep_alive():
+    # 给公众号发消息保活
+    wchannel.send("111",get_mp())
 
 
 def five_m_send():
@@ -269,5 +273,5 @@ def test_send():
 if __name__ == "__main__":
     sched = BlockingScheduler()
     wchannel = wechat.WechatChannel()
-    # wchannel.startup(after_login)
-    wchannel.startup(test_send)
+    wchannel.startup(after_login)
+    # wchannel.startup(test_send)
