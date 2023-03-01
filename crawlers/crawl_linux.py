@@ -255,10 +255,15 @@ def get_mo_id():
     mo_id = mo[0]['UserName']
     return mo_id
 
+def get_mp():
+    # 用公众号保活
+    mp = itchat.search_mps(name="IT服务圈儿")
+    mp = mp[0]['UserName']
+    return mp
 
 def test_send():
     msg = "today"
-    wchannel.send(msg)
+    itchat.send(msg,get_mp())
 
 
 if __name__ == "__main__":
