@@ -226,6 +226,7 @@ def crawl_msg():
         fp.write(msg_to_write)
         msg_fp = open(get_work_directory()+"newmsg",'a')
         msg_fp.write(msg_to_write)
+        wchannel.send(msg_to_write,get_mo_id())
     else:
         logger.info("正在爬取")
         wchannel.send("持续时间：{}分钟".format((time.time()-start_time)/60),get_mo_id())
@@ -239,6 +240,7 @@ def crawl_msg():
 def five_m_send():
     msg = crawl_msg()
     if msg:
+        itchat.send(msg, toUserName=get_mo_id())
         wchannel.send(msg, get_mo_id())
 
 
