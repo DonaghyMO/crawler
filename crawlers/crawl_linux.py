@@ -258,10 +258,11 @@ def get_mo_id():
 
 def test_send():
     msg = "today"
-    wchannel.send(msg, get_mo_id())
+    wchannel.send(msg)
 
 
 if __name__ == "__main__":
     sched = BlockingScheduler()
     wchannel = wechat.WechatChannel()
-    wchannel.startup(after_login)
+    # wchannel.startup(after_login)
+    wchannel.startup(test_send)
