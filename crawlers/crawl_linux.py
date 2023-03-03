@@ -27,13 +27,17 @@ start_time = time.time()
 
 work_directory_linux = "/root/msg/"
 work_directory_win = "D:\\msg\\"
+
+
 def get_crawl_date():
     return datetime.date.today()
+
+
 def get_file_name():
     if platform.system().lower() == "linux":
-        file_name = "{}{}.txt".format(work_directory_linux,get_crawl_date())
+        file_name = "{}{}.txt".format(work_directory_linux, get_crawl_date())
     else:
-        file_name = "{}{}.txt".format(work_directory_win,get_crawl_date())
+        file_name = "{}{}.txt".format(work_directory_win, get_crawl_date())
     return file_name
 
 
@@ -41,10 +45,12 @@ def get_today_contain():
     fp_r = open(get_file_name(), "r")
     return fp_r.read()
 
+
 def get_work_directory():
     if platform.system().lower() == "linux":
         return work_directory_linux
     return work_directory_win
+
 
 def parse_xiangtan_time(time_msg):
     months = {"一月": 1, "二月": 2, "三月": 3, "四月": 4, "五月": 5, "六月": 6, "七月": 7, "八月": 8, "九月": 9,
@@ -69,7 +75,7 @@ def parse_time(time_str):
     return datetime.date(year, month, day)
 
 
-def is_msg_exist(msg,today_contain):
+def is_msg_exist(msg, today_contain):
     return msg in today_contain
 
 
@@ -94,8 +100,8 @@ def crawl_msg():
                         "http://muchong.com/bbs/kaoyan.php?action=adjust&type=1&page=3&page=4"],
         "hangzhoushifan": "https://yjs.hznu.edu.cn/yjszs/sszs/",
         "xiangtandaxue": "https://jwxy.xtu.edu.cn/tzgg1/tzgg.htm",
-        "yanshandaxue":"https://zsjyc.ysu.edu.cn/yjsxwz/sszs/szdong.htm",
-        "hubeidaxue":"http://yz.hubu.edu.cn/zsxy/sszs.htm"
+        "yanshandaxue": "https://zsjyc.ysu.edu.cn/yjsxwz/sszs/szdong.htm",
+        "hubeidaxue": "http://yz.hubu.edu.cn/zsxy/sszs.htm"
     }
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36",
@@ -126,7 +132,7 @@ def crawl_msg():
             if mesg_date > crawl_date:
                 mesg = "【广州大学方班{}】有新消息{}\n".format(mesg_date,
                                                              re.sub(r"<.*?>|&nbsp;|\n", "", str(i.find_parent())))
-                if not is_msg_exist(mesg,today_contain):
+                if not is_msg_exist(mesg, today_contain):
                     flag = False
                     msg_to_write = msg_to_write + mesg
 
@@ -141,7 +147,7 @@ def crawl_msg():
 
                 i = re.findall(r"title=(.+?)\"", str(i))
                 mesg = "【广州大学研究生院{}】有新消息：{}\n".format(parse_time(mesg_time[0]), i)
-                if not is_msg_exist(mesg,today_contain):
+                if not is_msg_exist(mesg, today_contain):
                     flag = False
                     msg_to_write = msg_to_write + mesg
 
@@ -156,7 +162,7 @@ def crawl_msg():
                 continue
             mesg = "【福建师范{}】有新消息：{}\n".format(parse_time(mesg_time[0]),
                                                       re.sub(r"<.*?>|&nbsp;|\n", "", str(i.find_all("a"))))
-            if not is_msg_exist(mesg,today_contain):
+            if not is_msg_exist(mesg, today_contain):
                 flag = False
                 msg_to_write = msg_to_write + mesg
 
@@ -182,7 +188,7 @@ def crawl_msg():
         msg_day = parse_xiangtan_time(delete_html(str(i.div.div)))
         if msg_day >= crawl_date:
             msg = "【湘潭大学{}】{}\n".format(str(crawl_date), delete_html(str(i)))
-            if not is_msg_exist(msg,today_contain):
+            if not is_msg_exist(msg, today_contain):
                 flag = False
                 msg_to_write = msg_to_write + msg
 
@@ -197,7 +203,7 @@ def crawl_msg():
         if crawl_day >= crawl_date:
             msg = "【燕山大学{}】{}\n".format(crawl_date, delete_html(str(i)).strip())
             if not is_msg_exist(msg, today_contain):
-                msg_to_write = msg_to_write+msg
+                msg_to_write = msg_to_write + msg
 
     # 湖北大学
     req = requests.get(url_dic['hubeidaxue'], headers=headers)
@@ -205,12 +211,11 @@ def crawl_msg():
     hubeidaxue_b = bs4.BeautifulSoup(req.text, "html.parser")
     for i in hubeidaxue_b.find_all("a", attrs={'target': "_blank"}):
         if 'title' in i.attrs.keys():
-            date = parse_time(re.findall(r'\d+-\d+-\d+',str(i.parent))[0])
+            date = parse_time(re.findall(r'\d+-\d+-\d+', str(i.parent))[0])
             if date >= crawl_date:
-                msg = "【湖北大学{}】{}\n".format(str(date),delete_html(str(i)))
+                msg = "【湖北大学{}】{}\n".format(str(date), delete_html(str(i)))
                 if not is_msg_exist(msg, today_contain):
                     msg_to_write = msg_to_write + msg
-
 
     # 小木虫
     for url in url_dic["xiaomuchong"]:
@@ -221,14 +226,15 @@ def crawl_msg():
                 continue
             mesg_time = re.findall(time_match, str(i))
             if mesg_time and parse_time(mesg_time[0]) >= crawl_date:
-                mesg = "【小木虫{}】{}\n".format(parse_time(mesg_time[0]), re.sub(r"<.*?>|&nbsp;|\n", "", str(i)))
-                if not is_msg_exist(mesg,today_contain) and is_computer_science(mesg):
+                href = i.td.a.get('href')
+                mesg = "【小木虫{}】{}\n链接：{}\n".format(parse_time(mesg_time[0]), re.sub(r"<.*?>|&nbsp;|\n", "", str(i)),href)
+                if not is_msg_exist(mesg, today_contain) and is_computer_science(mesg):
                     flag = False
                     msg_to_write = msg_to_write + mesg
 
     if not flag:
         fp.write(msg_to_write)
-        msg_fp = open(get_work_directory()+"newmsg",'a')
+        msg_fp = open(get_work_directory() + "newmsg", 'a')
         msg_fp.write(msg_to_write)
         # wchannel.send(msg_to_write,get_mo_id())
     else:
@@ -240,9 +246,10 @@ def crawl_msg():
     # TODO:中国教育在线
     return msg_to_write
 
+
 def keep_alive():
     # 给公众号发消息保活
-    wchannel.send("111",get_mp())
+    wchannel.send("111", get_mp())
 
 
 def five_m_send():
@@ -268,15 +275,17 @@ def get_mo_id():
     mo_id = mo[0]['UserName']
     return mo_id
 
+
 def get_mp():
     # 用公众号保活
     mp = itchat.search_mps(name="IT服务圈儿")
     mp = mp[0]['UserName']
     return mp
 
+
 def test_send():
     msg = "today"
-    itchat.send(msg,get_mp())
+    itchat.send(msg, get_mp())
 
 
 if __name__ == "__main__":
